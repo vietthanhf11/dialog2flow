@@ -106,8 +106,8 @@ def preprocess(text):
 
 
 def get_turn(turn, act_slots):
-    return {"tag": (tmp:="USER" if turn['id'] % 2 else "SYSTEM"),
-            "text": preprocess(turn['text']),
+    return {"tag": (tmp:="USER" if turn['turn_id'] % 2 else "SYSTEM"),
+            "text": turn['text'],
             "turn": f"{tmp}: {act_slots}".strip()}  # SPK: domain-act slot*
 
 
@@ -150,8 +150,8 @@ def generate_trajectories(data, only_single_domain=False):
             if len(act_slots) > 1:
                 continue
 
-            # if act_slots:
-            #     trajectories[dialog_id]["log"].append(get_turn(turn, "; ".join(act_slots)))
+            if act_slots:
+                 trajectories[dialog_id]["log"].append(get_turn(turn, "; ".join(act_slots)))
 
         trajectories[dialog_id]["log"].append({"tag": None, "text": None, "turn": DEFAULT_TOKEN_END})
     print(f"Finished.")
