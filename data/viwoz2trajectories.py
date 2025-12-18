@@ -106,9 +106,9 @@ def preprocess(text):
 
 
 def get_turn(turn, act_slots):
-    return {"tag": (tmp:="USER" if turn['turn_id'] % 2 else "SYSTEM"),
+    return {"tag": (tmp:="user" if turn['turn_id'] % 2 else "system"),
             "text": turn['text'],
-            "turn": f"{tmp}: {act_slots}".strip()}  # SPK: domain-act slot*
+            "turn": f"{tmp.upper()}: {act_slots}".strip()}  # SPK: domain-act slot*
 
 
 def generate_trajectories(data, only_single_domain=False):
