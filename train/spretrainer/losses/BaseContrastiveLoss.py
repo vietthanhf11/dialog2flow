@@ -88,8 +88,8 @@ class BaseContrastiveLoss(BaseLoss):
                 my_start, my_end = sum(batch_sizes[:my_rank]), sum(batch_sizes[:my_rank]) + my_batch_size
 
             # anchors and candidates have grads for brackprop
-            all_anchors[my_start: my_end] = anchors.detach()
-            all_candidates[my_start: my_end].copy_(candidates)
+            all_anchors[my_start: my_end] = anchors
+            all_candidates[my_start: my_end] = candidates
 
             return all_anchors, all_candidates, all_labels
         else:
