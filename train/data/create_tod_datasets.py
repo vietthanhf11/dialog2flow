@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Script to convert DialogStudio TOD datasets into a common standardized unified format.
 
@@ -565,7 +564,7 @@ get_acts_slots_intent = {
 
 
 if __name__ == "__main__":
-    login()
+    login(new_session=False)
     for dataset in tqdm(args.datasets, desc="Converting datasets"):
         data = load_dataset('Salesforce/dialogstudio', dataset, trust_remote_code=True)
 
