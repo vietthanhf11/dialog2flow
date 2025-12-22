@@ -67,13 +67,13 @@ class BaseContrastiveLoss(BaseLoss):
                 pad_candidates = candidates
                 pad_labels = labels
 
-            with torch.no_grad():
-                all_anchors = self.accelerator.gather(pad_anchors)
-                all_candidates = self.accelerator.gather(pad_candidates)
-                all_labels = None if labels is None else self.accelerator.gather(pad_labels)
-
-                del pad_anchors, pad_candidates
-
+            # with torch.no_grad():
+            all_anchors = self.accelerator.gather(pad_anchors)
+            all_candidates = self.accelerator.gather(pad_candidates)
+            all_labels = None if labels is None else self.accelerator.gather(pad_labels)
+        
+            del pad_anchors, pad_candidates
+                
             if self.even_batches:
                 my_start, my_end = my_rank * my_batch_size, (my_rank + 1) * my_batch_size
             else:
@@ -88,8 +88,8 @@ class BaseContrastiveLoss(BaseLoss):
                 my_start, my_end = sum(batch_sizes[:my_rank]), sum(batch_sizes[:my_rank]) + my_batch_size
 
             # anchors and candidates have grads for brackprop
-            all_anchors[my_start: my_end] = anchors
-            all_candidates[my_start: my_end] = candidates
+            all_anchors[my_start: my_end] = anchors.detach()
+            all_candidates[my_start: my_end].copy_(candidates)
 
             return all_anchors, all_candidates, all_labels
         else:
